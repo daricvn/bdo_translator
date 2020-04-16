@@ -36,7 +36,7 @@
               <div class="col">
                   <div class="row">
                       <div class="col">
-                            <q-input label="Source" square outlined dense :value="destination" readonly />
+                            <q-input label="Destination" square outlined dense :value="destination" readonly />
                       </div>
                       <div class="col-auto q-pl-sm">
                             <q-btn unelevated color="primary" @click="browseDest">
@@ -48,7 +48,7 @@
               <!-- Action  -->
               <div class="col text-center q-pt-md" >
                   <q-btn unelevated @click="hide">Close</q-btn>
-                  <q-btn class="q-ml-md" unelevated color="primary" @click="submit"
+                  <q-btn class="q-ml-md" unelevated color="positive" @click="submit"
                     :disable="!source || !destination"
                   >Patch</q-btn>
               </div>

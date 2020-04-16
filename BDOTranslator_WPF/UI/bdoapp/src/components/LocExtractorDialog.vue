@@ -35,7 +35,7 @@
               <div class="col">
                   <div class="row">
                       <div class="col">
-                            <q-input label="Source" square outlined dense :value="destination" readonly />
+                            <q-input label="Destination" square outlined dense :value="destination" readonly />
                       </div>
                       <div class="col-auto q-pl-sm">
                             <q-btn unelevated color="primary" @click="browseDest">
@@ -46,13 +46,13 @@
               </div>
               <!-- Checkbox  -->
               <div class="col q-pb-sm">
-                  <q-checkbox label="Encrypt" v-model="encrypt" color="primary">
+                  <q-checkbox label="Encrypt" v-model="encrypt" color="info">
                   </q-checkbox>
               </div>
               <!-- Action  -->
               <div class="col text-center q-pt-sm" >
                   <q-btn unelevated @click="hide">Close</q-btn>
-                  <q-btn class="q-ml-md" unelevated color="primary" @click="submit"
+                  <q-btn class="q-ml-md" unelevated color="positive" @click="submit"
                     :disable="!source || !destination"
                   >{{ encrypt ? "Encrypt":"Extract" }}</q-btn>
               </div>

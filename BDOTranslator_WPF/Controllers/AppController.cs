@@ -430,10 +430,10 @@ namespace BDOTranslator_WPF.Controllers
             return Response.OK;
         }
 
-        [HttpGet(Route = "/app/close")]
+        [HttpPost(Route = "/app/close")]
         public ChromelyResponse Close(ChromelyRequest req)
         {
-            Application.Current.Shutdown();
+            Environment.Exit(0);
             return Response.OK;
         }
     }
