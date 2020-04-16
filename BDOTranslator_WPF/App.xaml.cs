@@ -28,9 +28,11 @@ namespace BDOTranslator_WPF
                .UseConfiguration<DefaultConfiguration>(new DefaultConfiguration() { 
                     CefDownloadOptions=new CefDownloadOptions(true,true),
                     StartUrl="app://bdo-ui/index.html",
+                    DebuggingMode = false,
                     WindowOptions = new WindowOptions()
                     {
                         Title="Black Desert Translator",
+                        RelativePathToIconFile="./app.ico",
                          DisableResizing = true,
                          StartCentered = true,
                          DisableMinMaximizeControls= true,
