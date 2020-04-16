@@ -12,7 +12,14 @@
                 </q-btn>
             </div>
             <div class="col-auto">
-                <q-input class="full-width" outlined type="textarea" dense v-model="editorText" @keydown.enter.prevent @keyup.enter.prevent="submit" />
+                <q-input ref="editor" class="full-width" outlined type="textarea" dense v-model="editorText" @keydown.enter="onKeyEnter" />
+            </div>
+            <div class="col-auto text-right q-pa-sm">
+                <q-btn color="primary" unelevated icon="delete" @click="clear">
+                    <q-tooltip content-style="font-size: 14px">
+                        Clear (Ctrl + N)
+                    </q-tooltip>
+                </q-btn>
             </div>
             <div class="col">
                 <slot></slot>
@@ -23,7 +30,7 @@
                 </q-btn>
                 <q-btn class="q-ml-sm" size="lg" color="positive" unelevated type="submit">
                     <q-icon class="on-left" name="save"></q-icon>
-                    Save
+                    Save <span class="text-caption" style="font-size: 12px">(Shift + Enter)</span>
                 </q-btn>
             </div>
         </div>
@@ -33,25 +40,32 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import { Prop, Emit, Watch, Inject } from 'vue-property-decorator';
+import { Prop, Emit, Watch, Inject, Ref } from 'vue-property-decorator';
 import AppService from '../services/AppService';
+import { QInput } from 'quasar';
 
 @Component
 export default class EditorPanel extends Vue{
     @Prop({ default: ''}) oldText: string = '';
     editorText: string = '';
     @Inject() appService!: AppService;
+    @Ref("editor") editor!: QInput;
     mounted(){
         const duplicate = this.pullDown;
+        const clearText = this.clear;
         (window as any).$app = {
             ...(window as any).$app,
-            duplicate
+            duplicate,
+            clearText
         }
     }
 
-    @Watch("oldText")
+
     clear(){
         this.editorText='';
+        if (this.editor){
+            this.editor.focus();
+        }
     }
 
     @Emit("submit")
@@ -59,8 +73,16 @@ export default class EditorPanel extends Vue{
         return this.editorText;
     }
 
+    @Watch("oldText")
     pullDown(){
         this.editorText = this.oldText;
+    }
+
+    onKeyEnter(e:KeyboardEvent){
+        if (e.shiftKey){
+            e.preventDefault();
+            this.submit();
+        }
     }
 
     close(){

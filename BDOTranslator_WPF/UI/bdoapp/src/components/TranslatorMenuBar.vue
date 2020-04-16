@@ -9,13 +9,13 @@
                     <q-item-section>Open...</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup>
-                    <q-item-section>Write To File (Ctrl + S)</q-item-section>
+                        <q-item-section>Write To File (Ctrl + S)</q-item-section>
                     </q-item>
 
                     <q-separator />
 
                     <q-item clickable v-close-popup>
-                    <q-item-section>Quit</q-item-section>
+                        <q-item-section>Quit</q-item-section>
                     </q-item>
                 </q-list>
                 </q-menu>
@@ -25,15 +25,18 @@
                 Tools
                 <q-menu auto-close>
                 <q-list dense style="min-width: 100px">
-                    <q-item clickable>
-                    <q-item-section>Find... (Ctrl + F)</q-item-section>
+                    <q-item clickable @click="showFindingTools">
+                        <q-item-section>Find... (Ctrl + F)</q-item-section>
                     </q-item>
-                    <q-item clickable>
-                    <q-item-section>Replace... (Ctrl + H)</q-item-section>
+                    <q-item clickable @click="showRegexTools">
+                        <q-item-section>Replace... (Ctrl + G)</q-item-section>
                     </q-item>
                     <q-separator />
                     <q-item clickable>
-                    <q-item-section>Text Patcher</q-item-section>
+                        <q-item-section>Text Patcher</q-item-section>
+                    </q-item>
+                    <q-item clickable>
+                        <q-item-section>.Loc Extractor</q-item-section>
                     </q-item>
                 </q-list>
                 </q-menu>
@@ -58,6 +61,13 @@ import FindTool from './FindTool.vue';
 })
 export default class TranslatorMenuBar extends Vue {
 
+    showRegexTools(){
+        window.$app.showRegexTools();
+    }
+
+    showFindingTools(){
+        window.$app.showFindTools();
+    }
 }
 </script>
 

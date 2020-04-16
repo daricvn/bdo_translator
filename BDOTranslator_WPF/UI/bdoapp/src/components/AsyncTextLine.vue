@@ -58,6 +58,12 @@ export default class AsyncTextLine extends Vue {
       return data;
   }
 
+  @Watch("data")
+  onDataNull(){
+    if (!this.data)
+      this.onRequested();
+  }
+
   @Emit("requested")
   onRequested(){
       return this.index

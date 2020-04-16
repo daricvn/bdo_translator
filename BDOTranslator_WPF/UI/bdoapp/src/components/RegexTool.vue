@@ -11,13 +11,16 @@
             <q-card-section>
                 <div class="column full-height" style="min-width: 300px">
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="pattern" label="Find | Regex Pattern" />
+                        <q-input outlined v-model="pattern" label="Find" />
                     </div>
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="replaceTo" label="Replace to..." />
+                        <q-input outlined v-model="replaceTo" label="Replace to..." autofocus />
                     </div>
                     <div class="col q-pa-sm">
                         <q-checkbox v-model="caseInsensitive" label="Case insensitive" color="primary" />
+                    </div>
+                    <div class="col q-pa-sm">
+                        <q-checkbox v-model="useRegex" label="Use RegexExpression" color="primary" />
                     </div>
                 </div>
             </q-card-section>
@@ -45,6 +48,7 @@ export default class RegexTool extends Vue {
     replaceTo: string='';
     open: boolean =false;
     caseInsensitive:boolean = false;
+    useRegex: boolean= false;
     @Inject() appService!: AppService;
     $q!: QVueGlobals;
 
@@ -66,7 +70,7 @@ export default class RegexTool extends Vue {
         this.$q.loading.show({
             message: 'Replacing...'
         })
-        this.appService.regex(this.pattern, this.replaceTo, this.caseInsensitive).then((res)=>{
+        this.appService.regex(this.pattern, this.replaceTo, this.useRegex, this.caseInsensitive).then((res)=>{
             this.$q.loading.hide();
             if (res.data && !isNaN(+res.data)){
                 let count = +res.data;
@@ -82,9 +86,9 @@ export default class RegexTool extends Vue {
         }).finally(()=>this.$q.loading.hide());
     }
 
-    show(text: string =''){
+    show(){
         this.open = true;
-        this.pattern=text || this.getSelectionText();
+        this.pattern=this.getSelectionText();
         this.replaceTo='';
     }
 

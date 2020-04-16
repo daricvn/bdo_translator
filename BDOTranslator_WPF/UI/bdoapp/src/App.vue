@@ -22,7 +22,10 @@ export default class App extends Vue {
         if (ev.ctrlKey && ev.code == "KeyD") {
           window.$app.duplicate();
         }
-        if (ev.ctrlKey && ev.code == "KeyH") {
+        if (ev.ctrlKey && ev.code =='KeyN'){
+          window.$app.clearText();
+        }
+        if (ev.ctrlKey && ev.code == "KeyG") {
           if (window.$app.isFindToolsOpen())
             window.$app.hideFindTools();
           window.$app.showRegexTools();
@@ -31,6 +34,12 @@ export default class App extends Vue {
           if (window.$app.isRegexToolsOpen())
             window.$app.hideRegexTools();
           window.$app.showFindTools();
+        }
+        if (ev.ctrlKey && ev.code == "KeyZ"){
+          this.appService.undo();
+        }
+        if (ev.ctrlKey && ev.code == "KeyY"){
+          this.appService.redo();
         }
         if (ev.ctrlKey && ev.code =='KeyS'){
           window.$app.saveFile();

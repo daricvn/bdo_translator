@@ -114,6 +114,12 @@ export default class Translator extends Vue {
         const getSelectedIndex = ()=>{
             return this.selectedIndex;
         }
+        const refresh = ()=>{
+            this.listCount=0;
+            let keys = Object.keys(this.lines)
+            for (let i=0; i<keys.length; i++)
+                Vue.delete(this.lines, keys[i]);
+        }
         (window as any).$app = {
             ...(window as any).$app,
             setSelectedIndex,
@@ -122,6 +128,7 @@ export default class Translator extends Vue {
             setFilePath,
             getFilePath,
             setLine,
+            refresh,
             goTo,
             getSelectedIndex,
             saveFile

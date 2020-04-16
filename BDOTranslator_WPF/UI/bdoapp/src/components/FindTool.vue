@@ -11,7 +11,7 @@
             <q-card-section>
                 <div class="column" style="min-width: 340px">
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="pattern" label="Find | Regex Pattern" />
+                        <q-input outlined v-model="pattern" label="Find | Regex Pattern" autofocus />
                     </div>
                     <div class="col q-pa-sm">
                         <q-checkbox v-model="caseInsensitive" label="Case insensitive" color="primary" />
@@ -68,7 +68,7 @@ export default class FindTool extends Vue {
     }
 
     submit(){
-        this.appService.find(this.pattern, (window as any).$app.getSelectedIndex(), this.exact, this.direction=='up'?'up':'down')
+        this.appService.find(this.pattern, (window as any).$app.getSelectedIndex(), this.caseInsensitive, this.exact, this.direction=='up'?'up':'down')
         .then(res=>{
             if (res.data && +res.data >=0){
                 (window as any).$app.goTo(+res.data);

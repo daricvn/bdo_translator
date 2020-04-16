@@ -14,19 +14,21 @@ export default class AppService {
         return Axios.put(`${CONFIG.API_URL}/update/text?index=${index}&autoReplace=${autoReplace?1:0}`, text);
     }
 
-    regex(pattern: string, replaceTo: string, ignoreSensitive: boolean= false){
+    regex(pattern: string, replaceTo: string, regex: boolean=false, ignoreSensitive: boolean= false){
         return Axios.post(`${CONFIG.API_URL}/regex`,{
             pattern,
             text: replaceTo,
+            regex: regex?1:0,
             ignoreSensitive: ignoreSensitive?1:0
         });
     }
 
-    find(pattern: string, currentIndex: number, exact: boolean = false, direction: 'up' | 'down' = 'down'){
+    find(pattern: string, currentIndex: number, ignoreSensitive: boolean =false, exact: boolean = false, direction: 'up' | 'down' = 'down'){
         return Axios.post(`${CONFIG.API_URL}/findIndex`,{
             pattern,
             currentIndex,
             exact: exact ? 1: 0,
+            ignoreSensitive: ignoreSensitive?1:0,
             direction
         });
     }
@@ -37,5 +39,11 @@ export default class AppService {
 
     closeApp(){
         return Axios.post(`${CONFIG.API_URL}/app/close`);
+    }
+    undo(){
+        return Axios.get(`${CONFIG.API_URL}/app/undo`);
+    }
+    redo(){
+        return Axios.get(`${CONFIG.API_URL}/app/redo`);
     }
 }
