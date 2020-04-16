@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BDOTranslator_WPF", "BDOTranslator_WPF\BDOTranslator_WPF.csproj", "{B5FDE471-08E8-4794-A893-D082F3DB3FF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chromely", "Chromely", "{81093970-D886-4115-9640-0AA62DBA2364}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chromely", "..\Chromely-master\src\Chromely\Chromely.csproj", "{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chromely.CefGlue", "..\Chromely-master\src\Chromely.CefGlue\Chromely.CefGlue.csproj", "{636794B2-986E-467F-8452-F735F8740949}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chromely.Core", "..\Chromely-master\src\Chromely.Core\Chromely.Core.csproj", "{FC5BF784-452B-4C3B-903B-B0191F2C9721}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLinux|Any CPU = DebugLinux|Any CPU
+		Release|Any CPU = Release|Any CPU
+		ReleaseLinux|Any CPU = ReleaseLinux|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.DebugLinux|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.DebugLinux|Any CPU.Build.0 = Debug|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.ReleaseLinux|Any CPU.ActiveCfg = Release|Any CPU
+		{B5FDE471-08E8-4794-A893-D082F3DB3FF4}.ReleaseLinux|Any CPU.Build.0 = Release|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.DebugLinux|Any CPU.ActiveCfg = DebugLinux|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.DebugLinux|Any CPU.Build.0 = DebugLinux|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.ReleaseLinux|Any CPU.ActiveCfg = ReleaseLinux|Any CPU
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848}.ReleaseLinux|Any CPU.Build.0 = ReleaseLinux|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.DebugLinux|Any CPU.ActiveCfg = DebugLinux|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.DebugLinux|Any CPU.Build.0 = DebugLinux|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.ReleaseLinux|Any CPU.ActiveCfg = ReleaseLinux|Any CPU
+		{636794B2-986E-467F-8452-F735F8740949}.ReleaseLinux|Any CPU.Build.0 = ReleaseLinux|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.DebugLinux|Any CPU.ActiveCfg = DebugLinux|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.DebugLinux|Any CPU.Build.0 = DebugLinux|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.ReleaseLinux|Any CPU.ActiveCfg = ReleaseLinux|Any CPU
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721}.ReleaseLinux|Any CPU.Build.0 = ReleaseLinux|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B0DC0FF9-1BBD-4D0D-B1F4-77CD874F2848} = {81093970-D886-4115-9640-0AA62DBA2364}
+		{636794B2-986E-467F-8452-F735F8740949} = {81093970-D886-4115-9640-0AA62DBA2364}
+		{FC5BF784-452B-4C3B-903B-B0191F2C9721} = {81093970-D886-4115-9640-0AA62DBA2364}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E83DF88-807A-4D25-845F-038B136E9621}
+	EndGlobalSection
+EndGlobal
