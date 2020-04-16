@@ -19,7 +19,7 @@ namespace BDOTranslator.Models
             Addr1 = a1;
             Addr2 = a2;
             Addr3 = a3;
-            Addr4 = 4;
+            Addr4 = a4;
             Text = text;
         }
 
@@ -30,6 +30,17 @@ namespace BDOTranslator.Models
             sb.Append(Text);
             sb.Append("\"");
             return string.Join("\t", Type, Addr1, Addr2, Addr3, Addr4, sb.ToString());
+        }
+
+        public TextLine Clone()
+        {
+            return new TextLine(Type, Addr1, Addr2, Addr3, Addr4, Text);
+        }
+
+        public bool HasSameAddress(TextLine other)
+        {
+            return this.Type == other.Type && this.Addr1 == other.Addr1 && this.Addr2 == other.Addr2
+                    && this.Addr3 == other.Addr3 && this.Addr4 == other.Addr4;
         }
     }
 }

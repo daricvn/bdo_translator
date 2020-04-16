@@ -120,6 +120,7 @@ export default class Translator extends Vue {
             for (let i=0; i<keys.length; i++)
                 Vue.delete(this.lines, keys[i]);
         }
+        const browseFile = this.browse;
         (window as any).$app = {
             ...(window as any).$app,
             setSelectedIndex,
@@ -131,13 +132,14 @@ export default class Translator extends Vue {
             refresh,
             goTo,
             getSelectedIndex,
-            saveFile
+            saveFile,
+            browseFile
         }
     }
 
     browse(){
-        // this.$q.loading.show();
-        this.appService.getFile().finally(()=>{
+        this.$q.loading.show();
+        this.appService.getFile().then(res=>{}).finally(()=>{
             this.$q.loading.hide();
         });
     }

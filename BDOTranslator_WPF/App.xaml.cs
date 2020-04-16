@@ -30,6 +30,7 @@ namespace BDOTranslator_WPF
                     StartUrl="app://bdo-ui/index.html",
                     WindowOptions = new WindowOptions()
                     {
+                        Title="Black Desert Translator",
                          DisableResizing = true,
                          StartCentered = true,
                          DisableMinMaximizeControls= true,

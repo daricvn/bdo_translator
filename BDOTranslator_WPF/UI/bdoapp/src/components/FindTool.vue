@@ -11,23 +11,34 @@
             <q-card-section>
                 <div class="column" style="min-width: 340px">
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="pattern" label="Find | Regex Pattern" autofocus />
+                        <q-input outlined v-model="pattern" label="Find" autofocus />
                     </div>
                     <div class="col q-pa-sm">
                         <q-checkbox v-model="caseInsensitive" label="Case insensitive" color="primary" />
+                    </div>
+                    <div class="col q-pa-sm">
+                        <q-checkbox v-model="regex" label="Use RegexExpression" color="primary" />
                     </div>
                     <div class="col q-pb-sm q-pl-sm">
                         <q-checkbox v-model="exact" label="Exact Match" color="primary" />
                     </div>
                     <div class="col q-pb-sm q-pl-sm">
-                        <q-select outlined v-model="direction" :options="directionOptions" emit-value label="Search Direction" />
+                        <div class="row">
+                            <div class="col-auto q-pr-sm">
+                                Search Direction
+                            </div>
+                            <div class="col">
+                                <q-radio v-model="direction" val="up" label="Up" />
+                                <q-radio v-model="direction" val="down" label="Down" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
                 <q-btn v-close-popup flat>Close</q-btn>
-                <q-btn v-close-popup class="q-ml-sm" color="primary" type="submit" unelevated
+                <q-btn class="q-ml-sm" color="primary" type="submit" unelevated
                     :disable="!pattern">Find</q-btn>
             </q-card-actions>
             </form>
@@ -39,7 +50,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
-import { QVueGlobals } from 'quasar';
+import { QVueGlobals, QSpinnerHourglass } from 'quasar';
 import AppService from '../services/AppService';
 
 @Component
@@ -50,6 +61,7 @@ export default class FindTool extends Vue {
     open: boolean =false;
     caseInsensitive:boolean = false;
     exact: boolean = false;
+    regex: boolean =false;
     @Inject() appService!: AppService;
     $q!: QVueGlobals;
 
@@ -68,7 +80,11 @@ export default class FindTool extends Vue {
     }
 
     submit(){
-        this.appService.find(this.pattern, (window as any).$app.getSelectedIndex(), this.caseInsensitive, this.exact, this.direction=='up'?'up':'down')
+        let spinner = QSpinnerHourglass as any;
+        this.$q.loading.show({
+            spinner
+        })
+        this.appService.find(this.pattern, (window as any).$app.getSelectedIndex(), this.regex, this.caseInsensitive, this.exact, this.direction=='up'?'up':'down')
         .then(res=>{
             if (res.data && +res.data >=0){
                 (window as any).$app.goTo(+res.data);
@@ -79,10 +95,13 @@ export default class FindTool extends Vue {
                 });
             }
         })
+        .finally(()=> this.$q.loading.hide())
     }
 
     show(){
-        this.pattern = this.getSelectionText();
+        let text= this.getSelectionText();
+        if (text)
+            this.pattern = text;
         this.open= true;
     }
 

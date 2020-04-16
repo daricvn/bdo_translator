@@ -26,8 +26,11 @@ import {
   QCard,
   QCardSection,
   QCardActions,
+  QRadio,
   QSelect,
+  QSpinnerHourglass,
   ClosePopup,
+  QAvatar,
   Dialog,
   Notify
 } from "quasar";
@@ -50,9 +53,12 @@ Vue.use(Quasar, {
     QCheckbox,
     QSelect,
     QCard,
+    QRadio,
     QCardSection,
     QCardActions,
     QDialog,
+    QAvatar,
+    QSpinnerHourglass,
     QSpace,
     QBtn
   },

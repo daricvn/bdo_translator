@@ -23,12 +23,13 @@ export default class AppService {
         });
     }
 
-    find(pattern: string, currentIndex: number, ignoreSensitive: boolean =false, exact: boolean = false, direction: 'up' | 'down' = 'down'){
+    find(pattern: string, currentIndex: number, regex: boolean = false, ignoreSensitive: boolean =false, exact: boolean = false, direction: 'up' | 'down' = 'down'){
         return Axios.post(`${CONFIG.API_URL}/findIndex`,{
             pattern,
             currentIndex,
             exact: exact ? 1: 0,
             ignoreSensitive: ignoreSensitive?1:0,
+            regex: regex? 1:0,
             direction
         });
     }
@@ -45,5 +46,49 @@ export default class AppService {
     }
     redo(){
         return Axios.get(`${CONFIG.API_URL}/app/redo`);
+    }
+
+    extractFile(source: string, dest: string, encrypt: boolean=false){
+        return Axios.post(`${CONFIG.API_URL}/app/run-script`, {
+            source,
+            dest,
+            encrypt: encrypt?1:0
+        });
+    }
+    patchFile(source: string, dest: string){
+        return Axios.post(`${CONFIG.API_URL}/app/run-patcher`, {
+            source,
+            dest
+        });
+    }
+
+    openExplorer(filePath: string){
+        return Axios.post(`${CONFIG.API_URL}/app/explorer`, filePath);
+    }
+
+    fileDialog(txt: boolean =true, loc: boolean = true){
+        let type=""
+        if (txt && loc)
+            type="txt,loc";
+        else {
+            if (loc)
+                type="loc";
+            else
+                type="txt";
+        }
+        return Axios.get(`${CONFIG.API_URL}/app/file-dialog?type=${type}`);
+    }
+
+    fileSaveDialog(txt: boolean =true, loc: boolean = true){
+        let type=""
+        if (txt && loc)
+            type="txt,loc";
+        else {
+            if (loc)
+                type="loc";
+            else
+                type="txt";
+        }
+        return Axios.get(`${CONFIG.API_URL}/app/file-save-dialog?type=${type}`);
     }
 }

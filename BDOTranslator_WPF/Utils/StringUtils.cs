@@ -63,5 +63,22 @@ namespace BDOTranslator.Utils
                     );
             return string.Empty;
         }
+
+        public static string ReplaceAll(this string source, string pattern, string to, bool ignoreCase= false)
+        {
+            var str = source;
+            var index = -to.Length;
+            var lastIndex = -1;
+            var compareType = ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
+            do
+            {
+                lastIndex = index + to.Length;
+                index = str.IndexOf(pattern, compareType);
+                if (index >= 0 && index >= lastIndex)
+                    str = str.Replace(pattern, to, compareType);
+            }
+            while (index >= 0 && index>= lastIndex);
+            return str;
+        }
     }
 }

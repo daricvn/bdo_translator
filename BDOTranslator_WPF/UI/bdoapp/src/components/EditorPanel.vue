@@ -25,8 +25,16 @@
                 <slot></slot>
             </div>
             <div class="col-auto text-right q-pa-md" style="box-sizing: border-box">
-                <q-btn outline class="q-ml-sm">
+                <q-btn outline class="q-ml-sm" @click="close">
                     Exit
+                </q-btn>
+                <q-btn outline class="q-ml-sm" color="primary" @click="undo">
+                    <q-icon name="undo" class="on-left" />
+                    Undo
+                </q-btn>
+                <q-btn outline class="q-ml-sm" color="secondary" @click="redo">
+                    <q-icon name="redo" class="on-left" />
+                    Redo
                 </q-btn>
                 <q-btn class="q-ml-sm" size="lg" color="positive" unelevated type="submit">
                     <q-icon class="on-left" name="save"></q-icon>
@@ -53,10 +61,12 @@ export default class EditorPanel extends Vue{
     mounted(){
         const duplicate = this.pullDown;
         const clearText = this.clear;
+        const closeApp = this.close;
         (window as any).$app = {
             ...(window as any).$app,
             duplicate,
-            clearText
+            clearText,
+            closeApp
         }
     }
 
@@ -86,7 +96,14 @@ export default class EditorPanel extends Vue{
     }
 
     close(){
-        
+        this.appService.closeApp();
+    }
+
+    undo(){
+        this.appService.undo();
+    }
+    redo(){
+        this.appService.redo();
     }
 }
 </script>
