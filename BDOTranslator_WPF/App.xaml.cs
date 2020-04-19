@@ -1,4 +1,5 @@
 ﻿using BDOTranslator_WPF.Implementation;
+using BDOTranslator_WPF.Utils;
 using Chromely;
 using Chromely.Core;
 using Chromely.Core.Configuration;
@@ -45,7 +46,10 @@ namespace BDOTranslator_WPF
                     }
                })
                .Build()
-               .Run(new string[] { });
+               .Run(new string[] { 
+
+               });
+
             Application.Current.Shutdown();
         }
     }

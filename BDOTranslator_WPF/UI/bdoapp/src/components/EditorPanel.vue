@@ -41,6 +41,9 @@
                     Save <span class="text-caption" style="font-size: 12px">(Shift + Enter)</span>
                 </q-btn>
             </div>
+            <div class="col-auto text-right">
+                Developed by Darick (Ryu™)
+            </div>
         </div>
     </form>
 </template>

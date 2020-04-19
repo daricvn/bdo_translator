@@ -79,6 +79,14 @@ export default class RegexTool extends Vue {
                     color: 'primary',
                     position: 'top',
                     actions: [
+                        { label: 'Revert', color: 'red', handler: ()=> { 
+                            this.$q.dialog({
+                                message:"Are you sure want to revert changes?",
+                                cancel: true
+                            }).onOk(()=>{
+                                this.appService.undo();
+                            })
+                        } },
                         { label: 'Dismiss', color: 'white' }
                     ]
                 });

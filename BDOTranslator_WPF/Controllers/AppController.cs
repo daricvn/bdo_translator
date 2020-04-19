@@ -1,6 +1,7 @@
 ﻿using BDOTranslator.Models;
 using BDOTranslator.Utils;
 using BDOTranslator_WPF.Models;
+using BDOTranslator_WPF.Utils;
 using Chromely.Core;
 using Chromely.Core.Configuration;
 using Chromely.Core.Network;
@@ -24,7 +25,7 @@ namespace BDOTranslator_WPF.Controllers
     public class AppController: ChromelyController
     {
         private const int MAX_HISTORY = 32;
-        private const string SCRIPT_PATH = "./tools";
+        private const string SCRIPT_PATH = "tools";
         private const string ENC_EXE = "encrypt.exe";
         private const string DEC_EXE = "decrypt.exe";
         private const int DEFAULT_SCAN_THRESHOLD = 20000;
@@ -373,16 +374,25 @@ namespace BDOTranslator_WPF.Controllers
         {
             var body = req.PostData.ToString().ToJson<Dictionary<string, object>>();
             var encrypt = body.ContainsKey("encrypt") && body["encrypt"].ToString().Equals("1");
-            var path = System.IO.Path.Combine(SCRIPT_PATH, encrypt ? ENC_EXE : DEC_EXE);
-            ProcessStartInfo info = new ProcessStartInfo(path);
+            //var basePath = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            //var path = System.IO.Path.Combine(basePath, SCRIPT_PATH, encrypt ? ENC_EXE : DEC_EXE);
+            //ProcessStartInfo info = new ProcessStartInfo("cmd.exe");
             var source = body["source"].ToString();
             var dest = body["dest"].ToString();
-            info.ArgumentList.Add(source);
-            info.ArgumentList.Add(dest);
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            var proc = Process.Start(info);
-            proc.WaitForExit();
+            //info.ArgumentList.Add("/c");
+            //info.ArgumentList.Add("start");
+            //info.ArgumentList.Add(path);
+            //info.ArgumentList.Add(source);
+            //info.ArgumentList.Add(dest);
+            //info.CreateNoWindow = true;
+            //info.UseShellExecute = true;
+            //info.WindowStyle = ProcessWindowStyle.Minimized;
+            //var proc = Process.Start(info);
+            //proc.WaitForExit();
+            if (encrypt)
+                BDOScript.Encrypt(source, dest);
+            else
+                BDOScript.Decrypt(source, dest);
             return Response.OK;
         }
 

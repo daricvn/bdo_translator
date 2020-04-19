@@ -46,7 +46,8 @@
               </div>
               <!-- Checkbox  -->
               <div class="col q-pb-sm">
-                  <q-checkbox label="Encrypt" v-model="encrypt" color="info">
+                  <!-- No longer support Encrypt function -->
+                  <q-checkbox label="Encrypt" v-model="encrypt" color="info" v-if="false">
                   </q-checkbox>
               </div>
               <!-- Action  -->
@@ -106,11 +107,11 @@ export default class LocExtractorDialog extends Vue {
         this.appService.fileSaveDialog(!this.encrypt, this.encrypt).then(res=>{
             if (res.data && res.data.Data)
                 this.destination = res.data.Data;
-            else this.destination = '';
         }).finally(()=>this.$q.loading.hide())
     }
 
     show(){
+        this.clear();
         this.open=true;
     }
     hide(){
