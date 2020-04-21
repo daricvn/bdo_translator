@@ -11,11 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="tools\**" />
+    <EmbeddedResource Remove="tools\**" />
+    <None Remove="tools\**" />
     <None Remove="UI\bdoapp\dist\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="UI\bdoapp\dist\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="tools\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,12 +33,6 @@
 
   <ItemGroup>
     <None Update="app.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="tools\decrypt.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="tools\encrypt.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
