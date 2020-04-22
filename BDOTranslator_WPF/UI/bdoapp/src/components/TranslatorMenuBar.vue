@@ -38,6 +38,9 @@
                     <q-item clickable @click="showExtractorTools">
                         <q-item-section>.Loc Extractor</q-item-section>
                     </q-item>
+                    <q-item clickable @click="showGzipTools">
+                        <q-item-section>Generate BLOC file</q-item-section>
+                    </q-item>
                 </q-list>
                 </q-menu>
             </div>
@@ -50,6 +53,7 @@
         <find-tool />
         <loc-extractor-dialog />
         <patcher-tool />
+        <gzip-tool />
         <about ref="about" />
     </div>
 </template>
@@ -64,6 +68,7 @@ import PatcherTool from './PatcherTool.vue';
 import { Inject, Ref } from 'vue-property-decorator';
 import AppService from '../services/AppService';
 import About from '../views/About.vue';
+import GzipTool from './GzipTool.vue';
 
 @Component({
     components:{
@@ -71,6 +76,7 @@ import About from '../views/About.vue';
         FindTool,
         LocExtractorDialog,
         PatcherTool,
+        GzipTool,
         About
     }
 })
@@ -102,6 +108,9 @@ export default class TranslatorMenuBar extends Vue {
 
     showPatcherTools(){
         window.$app.showPatcherTools();
+    }
+    showGzipTools(){
+        window.$app.showGzipTools();
     }
 }
 </script>

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
@@ -217,7 +218,7 @@ namespace BDOTranslator_WPF.Controllers
                         }
                 }
                 trace.Add(new LineTrace(index, lines[index]));
-                lines[index].Text = text;
+                lines[index].Text = text.Replace(Environment.NewLine, "\n");
                 PushHistory(trace.ToArray());
             }
 
@@ -317,6 +318,7 @@ namespace BDOTranslator_WPF.Controllers
             string locOnly = "Loc files (*.loc)|*.loc";
 
             string filter = string.Empty;
+            bool saveOnly = false;
             if (req.Parameters.ContainsKey("type"))
             {
                 var type = req.Parameters["type"];
@@ -330,10 +332,14 @@ namespace BDOTranslator_WPF.Controllers
                         filter = locOnly;
                 }
             }
+            else if (req.Parameters.ContainsKey("filter"))
+            {
+                filter = req.Parameters["filter"];
+            }
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = filter;
             dialog.CheckPathExists = true;
-            dialog.CheckFileExists = true;
+            dialog.CheckFileExists = !saveOnly;
             dialog.ShowDialog();
             if (!string.IsNullOrWhiteSpace(dialog.FileName))
                 return Response.Success(dialog.FileName.ReplaceAll("\\", "/"));
@@ -360,6 +366,10 @@ namespace BDOTranslator_WPF.Controllers
                     else
                         filter = locOnly;
                 }
+            }
+            else if (req.Parameters.ContainsKey("filter"))
+            {
+                filter = req.Parameters["filter"];
             }
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = filter;
@@ -405,26 +415,38 @@ namespace BDOTranslator_WPF.Controllers
             var loc1 = new LocalizationFile(source);
             var loc2 = new LocalizationFile(dest);
             var line1 = loc1.Process();
-            var line2 = loc2.Process();
-            var threshold = 0;
-            if (body.ContainsKey("threshold") && int.TryParse(body["threshold"].ToString(), out int userThreshold))
-                threshold = userThreshold;
-            else
-                threshold = DEFAULT_SCAN_THRESHOLD;
-            int max = 0;
+            var line2 = loc2.ProcessWithIndexer(out var indexer);
+            long index = 0;
             for (var i = 0; i < line1.Length; i++)
             {
-                max = Math.Min(i + threshold, line2.Length);
-                for (var j = i; j < max; j++)
-                    if (line1[i].HasSameAddress(line2[j]))
+                index = indexer.GetIndex(line1[i]);
+                if (index>=0 && index< line2.Length)
+                    if (line1[i].HasSameAddress(line2[index]))
                     {
-                        if (line1[i].Text != line2[j].Text)
-                            line2[j].Text = line1[i].Text;
-                        j = max + 1;
+                        if (line1[i].Text != line2[index].Text)
+                            line2[index].Text = line1[i].Text;
                     }
             }
             File.WriteAllLines(dest, line2.Select(x => x.ToString()), Encoding.Unicode);
             return Response.OK;
+        }
+        [HttpPost(Route = "/app/run-gzip")]
+        public ChromelyResponse RunGzip(ChromelyRequest req)
+        {
+            var body = req.PostData.ToString().ToJson<Dictionary<string, object>>();
+            var source = body["source"].ToString();
+            var dest = body["dest"].ToString();
+            if (File.Exists(source)){
+                var text = File.ReadAllText(source);
+                var bytes = Encoding.Unicode.GetBytes(text);
+                using (var fs = new FileStream(dest, FileMode.Create, FileAccess.Write))
+                using (var df = new DeflateStream(fs, CompressionLevel.Fastest))
+                {
+                    df.Write(bytes, 0, bytes.Length);
+                }
+                return Response.OK;
+            }
+            return Response.BadRequest;
         }
 
         [HttpPost(Route = "/app/explorer")]

@@ -5,9 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <AssemblyName>BDOTranslator_WPF</AssemblyName>
+    <AssemblyName>BDOTranslator</AssemblyName>
     <PackageId>BDO Translator</PackageId>
     <Authors>Darick Nguyen</Authors>
+    <Product>BDO Translator</Product>
   </PropertyGroup>
 
   <ItemGroup>

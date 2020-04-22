@@ -61,6 +61,13 @@ export default class AppService {
             dest
         });
     }
+    gzip(source: string, dest: string){
+        return Axios.post(`${CONFIG.API_URL}/app/run-gzip`, {
+            source,
+            dest
+        });
+    }
+
 
     openExplorer(filePath: string){
         return Axios.post(`${CONFIG.API_URL}/app/explorer`, filePath);
@@ -77,6 +84,13 @@ export default class AppService {
                 type="txt";
         }
         return Axios.get(`${CONFIG.API_URL}/app/file-dialog?type=${type}`);
+    }
+
+    openFileDialog(filter: string){
+        return Axios.get(`${CONFIG.API_URL}/app/file-dialog?filter=${encodeURI(filter)}`);
+    }
+    saveFileDialog(filter: string){
+        return Axios.get(`${CONFIG.API_URL}/app/file-save-dialog?filter=${encodeURI(filter)}`);
     }
 
     fileSaveDialog(txt: boolean =true, loc: boolean = true){
