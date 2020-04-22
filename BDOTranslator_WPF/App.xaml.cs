@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -23,71 +24,51 @@ namespace BDOTranslator_WPF
     /// </summary>
     public partial class App : Application
     {
-        public static volatile Loading Loader=null;
-        public static volatile bool DisplayLoader = false;
-        public static volatile Thread LoaderThread = null;
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
+            var f = new Loading();
             Thread thread = new Thread(() =>
             {
-                try
-                {
-                    DisplayLoader = true;
-                    var f = new Loading();
-                    f.Loaded += (a, b) =>
-                    {
-                        //Task.Run(() =>
-                        //{
-                        //    while (DisplayLoader)
-                        //        Thread.Sleep(250);
-                        //});
-                    };
-                    Loader = f;
-                    f.Show();
-                    Dispatcher.Run();
-                }
-                catch
-                {
-                    Loader.Close();
-                }
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.IsBackground = true;
-            LoaderThread = thread;
-            thread.Start();
-            var assembly = Assembly.GetExecutingAssembly();
-            AppBuilder
-               .Create()
-               .UseApp<TranslatorApp>()
-               .UseConfiguration<DefaultConfiguration>(new DefaultConfiguration()
-               {
-                   CefDownloadOptions = new CefDownloadOptions(true, true),
-                   StartUrl = "app://bdo-ui/index.html",
-                   DebuggingMode = true,
-                   WindowOptions = new WindowOptions()
+                var assembly = Assembly.GetExecutingAssembly();
+                AppBuilder
+                   .Create()
+                   .UseApp<TranslatorApp>()
+                   .UseConfiguration<DefaultConfiguration>(new DefaultConfiguration()
                    {
-                       Title = "Black Desert Translator",
-                       RelativePathToIconFile = "./app.ico",
-                       DisableResizing = true,
-                       StartCentered = true,
-                       DisableMinMaximizeControls = true,
-                       Size = new WindowSize(1080, 640)
-                   },
-                   UrlSchemes = new List<UrlScheme>()
-                    {
+                       CefDownloadOptions = new CefDownloadOptions(true, true),
+                       StartUrl = "app://bdo-ui/index.html",
+                       DebuggingMode = true,
+                       WindowOptions = new WindowOptions()
+                       {
+                           Title = "Black Desert Translator",
+                           RelativePathToIconFile = "./app.ico",
+                           DisableResizing = true,
+                           StartCentered = true,
+                           DisableMinMaximizeControls = true,
+                           Size = new WindowSize(1080, 640)
+                       },
+                       UrlSchemes = new List<UrlScheme>()
+                        {
                         new UrlScheme("app", "app", "bdo-ui", string.Empty, UrlSchemeType.AssemblyResource, assemblyOptions: new AssemblyOptions(assembly,"BDOTranslator_WPF", "UI.bdoapp.dist")),
                         new UrlScheme("Controller", "http", "bdo-command",string.Empty, UrlSchemeType.Custom)
-                    }
-               })
-               .Build()
-               .Run(new string[] {
-               });
-            if (Loader != null)
-                Loader.Dispatcher.BeginInvoke(() =>
+                        }
+                   })
+                   .Build()
+                   .Run(new string[] {
+                   });
+                if (File.Exists("build"))
                 {
-                    Loader.Close();
-                });
-            Application.Current.Shutdown();
+                    File.Delete("build");
+                }
+
+                Environment.Exit(0);
+            });
+            thread.IsBackground = false;
+            thread.Start();
+            f.Show();
+            while (!File.Exists("build"))
+                await Task.Delay(500);
+            f.Close();
         }
 
         private void Application_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)

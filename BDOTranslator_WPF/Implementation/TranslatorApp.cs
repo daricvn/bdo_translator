@@ -2,8 +2,11 @@
 using Chromely;
 using Chromely.Core;
 using Chromely.Core.Network;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -23,20 +26,12 @@ namespace BDOTranslator_WPF.Implementation
 
         public class CefFrameLoadHandler:CefLoadHandler
         {
-            protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
+            protected override void OnLoadStart(CefBrowser browser, CefFrame frame, CefTransitionType transitionType)
             {
-                base.OnLoadEnd(browser, frame, httpStatusCode);
-                if (frame.IsValid)
+                base.OnLoadStart(browser, frame, transitionType);
+                if (!File.Exists("./build"))
                 {
-                    if (App.DisplayLoader)
-                    {
-                        App.DisplayLoader = false;
-                        Dispatcher.FromThread(App.LoaderThread).Invoke(() =>
-                        {
-                            App.Loader.Close();
-                        });
-                        Dispatcher.FromThread(App.LoaderThread).InvokeShutdown();
-                    }
+                    File.WriteAllText("./build", "1");
                 }
             }
         }

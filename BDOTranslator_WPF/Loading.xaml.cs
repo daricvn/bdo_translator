@@ -21,5 +21,10 @@ namespace BDOTranslator_WPF
         {
             InitializeComponent();
         }
+
+        public void SetLabel(string text)
+        {
+            this.lblInfo.Text = text;
+        }
     }
 }
