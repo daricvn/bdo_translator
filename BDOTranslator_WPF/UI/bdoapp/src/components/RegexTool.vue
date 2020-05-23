@@ -9,12 +9,15 @@
             </q-card-section>
 
             <q-card-section>
-                <div class="column full-height" style="min-width: 300px">
+                <div class="column full-height" style="min-width: 400px">
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="pattern" label="Find" />
+                        <q-checkbox v-model="useEditor" label="Use TextEditor" color="warning" />
                     </div>
                     <div class="col q-pa-sm">
-                        <q-input outlined v-model="replaceTo" label="Replace to..." autofocus />
+                        <q-input outlined v-model="pattern" label="Find" :type="useEditor?'textarea':'text'" />
+                    </div>
+                    <div class="col q-pa-sm">
+                        <q-input outlined v-model="replaceTo" label="Replace to..."  :type="useEditor?'textarea':'text'" autofocus />
                     </div>
                     <div class="col q-pa-sm">
                         <q-checkbox v-model="caseInsensitive" label="Case insensitive" color="primary" />
@@ -49,6 +52,7 @@ export default class RegexTool extends Vue {
     open: boolean =false;
     caseInsensitive:boolean = false;
     useRegex: boolean= false;
+    useEditor: boolean = false;
     @Inject() appService!: AppService;
     $q!: QVueGlobals;
 

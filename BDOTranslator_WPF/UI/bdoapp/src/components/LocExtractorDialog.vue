@@ -47,7 +47,7 @@
               <!-- Checkbox  -->
               <div class="col q-pb-sm">
                   <!-- No longer support Encrypt function -->
-                  <q-checkbox label="Encrypt" v-model="encrypt" color="info" v-if="false">
+                  <q-checkbox label="Encrypt" v-model="encrypt" color="info" v-if="true">
                   </q-checkbox>
               </div>
               <!-- Action  -->

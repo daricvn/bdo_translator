@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BDOTranslator.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -27,7 +28,7 @@ namespace BDOTranslator.Models
         {
             StringBuilder sb = new StringBuilder(Text.Length + 2);
             sb.Append("\"");
-            sb.Append(Text);
+            sb.Append(Text.Replace(Environment.NewLine,"\n").ReplaceAll(Environment.NewLine, "\n"));
             sb.Append("\"");
             return string.Join("\t", Type, Addr1, Addr2, Addr3, Addr4, sb.ToString());
         }

@@ -12,11 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="tools\**" />
     <Compile Remove="UI\bdoapp\node_modules\**" />
-    <EmbeddedResource Remove="tools\**" />
     <EmbeddedResource Remove="UI\bdoapp\node_modules\**" />
-    <None Remove="tools\**" />
     <None Remove="UI\bdoapp\dist\**" />
     <None Remove="UI\bdoapp\node_modules\**" />
   </ItemGroup>
@@ -26,19 +23,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="tools\**" />
     <Page Remove="UI\bdoapp\node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Chromely" Version="5.0.77.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
     <PackageReference Include="zlib.net-mutliplatform" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="app.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tools\decrypt.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

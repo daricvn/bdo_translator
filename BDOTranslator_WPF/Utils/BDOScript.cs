@@ -1,5 +1,8 @@
 ﻿using BDOTranslator.Utils;
 using ComponentAce.Compression.Libs.zlib;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip.Compression;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -38,12 +41,13 @@ namespace BDOTranslator_WPF.Utils
                 var chars = br.ReadBytes((int)compressedSize);
                     //.Select(x=> (byte)x).ToArray();
                 Span<byte> uncompressedData;
-                using (var ms= new MemoryStream(chars))
                 using (var output = new MemoryStream())
-                    using (var zlib = new ZOutputStream(output))
                 {
-                    CopyStream(ms, zlib);
-                    zlib.finish();
+                    using (var input = new MemoryStream(chars))
+                    using (var zlib = new InflaterInputStream(input))
+                    {
+                        zlib.CopyTo(output);
+                    }
                     uncompressedData = output.ToArray().AsSpan();
                 }
                 if (uncompressedData.Length == (int) decompressedSize)
@@ -65,67 +69,50 @@ namespace BDOTranslator_WPF.Utils
             ulong id2;
             byte id3;
             byte id4;
-            Span<char> strBuff = new char[MAX_BUFF_SIZE];
-            ReadOnlySpan<char> tempSpan;
             string temp;
             var (tmpName, tmp) = CreateTempFile();
-            using (var fs = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
-            using (var bs = new BufferedStream(fs))
-            using (var sr = new StreamReader(bs, Encoding.Unicode))
             using (var bw = new BinaryWriter(tmp))
             {
                 int a;
-                string[] arr;
-                while (!sr.EndOfStream)
+                LocalizationFile file = new LocalizationFile(sourceFile);
+                var lines = file.Process();
+                List<short> span = new List<short>((int)MAX_BUFF_SIZE);
+                var index = 0;
+                foreach (var line in lines)
                 {
-                    strBuff.Fill(CHAR_NULL);
-                    arr = sr.ReadLine().Split('\t');
-                    if (arr == null || arr.Length < 6) break;
-                    type = ulong.Parse(arr[0]);
-                    id1 = ulong.Parse(arr[1]);
-                    id2 = ulong.Parse(arr[2]);
-                    id3 = byte.Parse(arr[3]);
-                    id4 = byte.Parse(arr[4]);
-                    temp = string.Concat(arr[5].Substring(1),"\r\n");
-                    for (a = 0; a < temp.Length+10; a++)
+                    //strBuff.Clear();
+                    span.Clear();
+                    type = (ulong)line.Type;
+                    id1 = (ulong)line.Addr1;
+                    id2 = (ulong)line.Addr2;
+                    id3 = (byte)line.Addr3;
+                    id4 = (byte)line.Addr4;
+                    temp = line.Text; //string.Concat(line.Text,"\r\n");
+                    for (a = 0; a < temp.Length; a++)
                     {
-                        if (a< temp.Length)
-                            strBuff[a] = temp[a];
+                        index = span.Count;
+                        span.Add((short)temp[a]);
+                        //strBuff[a] = temp[a];
                         if (a > 0)
                         {
-                            if (a == temp.Length - 1 && strBuff[a]=='"')
+                            if (temp[a] == 'n' && temp[a - 1].ToString() == "\\")
                             {
-                                strBuff[a] = CHAR_NULL;
-                                break;
-                            }
-                            if (strBuff[a] == CHAR_LF || strBuff[a] == CHAR_CR)
-                            {
-                                if (strBuff[a - 1] == '"')
-                                {
-                                    strBuff[a - 1] = CHAR_NULL;
-                                }
-                                strBuff[a] = CHAR_NULL;
-                                break;
-                            }
-                            if (strBuff[a] == 'n' && strBuff[a - 1] == '\\')
-                            {
-                                a--;
-                                strBuff[a] = CHAR_LF;
+                                span[index-1] = (short)CHAR_LF;
+                                span.RemoveAt(index);
                             }
                         }
                     }
-                    size = (ulong) strBuff.ToString().Trim('\0').TrimEnd('\0').Length;
+                    size = (ulong) span.Count;
                     bw.Write((UInt32)size); // strSize - 4
                     bw.Write((UInt32)type); //strType - 4
                     bw.Write((UInt32)id1); // Id1 - 4
                     bw.Write((UInt16)id2); // id2 -2
                     bw.Write((byte)id3); //id3 -1 
                     bw.Write((byte)id4); //id4 -1
-                    tempSpan = strBuff.ToString().Trim('\0').TrimEnd('\0').AsSpan();
-                    foreach (var c in tempSpan)
-                        bw.Write((UInt16) c); // -size
-                    bw.Write(CHAR_NULL);
-                    bw.Write(CHAR_NULL);
+                    foreach (var c in span)// tempSpan)
+                        bw.Write(c); // -size
+                    bw.Write((short) CHAR_NULL);
+                    bw.Write((short) CHAR_NULL);
                 }
                 tmp.Seek(0, SeekOrigin.End);
                 ulong uncompressedSize = (ulong)tmp.Position;
@@ -137,15 +124,17 @@ namespace BDOTranslator_WPF.Utils
                 {
                     uncompressedData = br.ReadBytes((int)uncompressedSize);
 
-                    using (var ms = new MemoryStream(uncompressedData.ToArray()))
+                    //using (var ms = new MemoryStream(uncompressedData.ToArray()))
                     using (var output = new MemoryStream())
-                    using (var zlib = new ZOutputStream(output,  zlibConst.Z_BEST_SPEED))
                     {
-                        CopyStream(ms, zlib);
-                        zlib.finish();
-                        compressedData = new byte[output.Length];
-                        compressedSize = (ulong)output.Length;
-                        compressedData = output.ToArray().AsSpan();
+                        using (var zlib = new DeflaterOutputStream(output, new Deflater(Deflater.BEST_SPEED)))
+                        {
+                            zlib.Write(uncompressedData.ToArray());
+                            zlib.Finish();
+                            compressedData = new byte[output.Length];
+                            compressedSize = (ulong)output.Length;
+                            compressedData = output.ToArray().AsSpan();
+                        }
                     }
                 }
                 using (var dfs = new FileStream(destFile, FileMode.Create, FileAccess.Write))

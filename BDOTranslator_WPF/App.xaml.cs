@@ -65,10 +65,10 @@ namespace BDOTranslator_WPF
             });
             thread.IsBackground = false;
             thread.Start();
-            f.Show();
-            while (!File.Exists("build"))
-                await Task.Delay(500);
-            f.Close();
+            //f.Show();
+            //while (!File.Exists("build"))
+                //await Task.Delay(500);
+            //f.Close();
         }
 
         private void Application_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)

@@ -213,7 +213,7 @@ namespace BDOTranslator_WPF.Controllers
                         if (lines[i].Text == oldText)
                         {
                             trace.Add(new LineTrace(i, lines[i]));
-                            lines[i].Text = text;
+                            lines[i].Text = text.Replace(Environment.NewLine, "\n");
                             ExecuteScript($"window.$app.setLine({i},\"{text}\")");
                         }
                 }
@@ -256,7 +256,7 @@ namespace BDOTranslator_WPF.Controllers
                         if (text != lines[i].Text)
                         {
                             trace.Add(new LineTrace(i, lines[i]));
-                            lines[i].Text = text;
+                            lines[i].Text = text.Replace(Environment.NewLine, "\n");
                             ExecuteScript($"window.$app.setLine({i},\"{lines[i].Text}\")");
                         }
                     }
@@ -384,11 +384,20 @@ namespace BDOTranslator_WPF.Controllers
         {
             var body = req.PostData.ToString().ToJson<Dictionary<string, object>>();
             var encrypt = body.ContainsKey("encrypt") && body["encrypt"].ToString().Equals("1");
-            //var basePath = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            //var path = System.IO.Path.Combine(basePath, SCRIPT_PATH, encrypt ? ENC_EXE : DEC_EXE);
-            //ProcessStartInfo info = new ProcessStartInfo("cmd.exe");
+            var basePath = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            var path = System.IO.Path.Combine(basePath, SCRIPT_PATH, encrypt ? ENC_EXE : DEC_EXE);
+            ProcessStartInfo info = new ProcessStartInfo(path);
             var source = body["source"].ToString();
             var dest = body["dest"].ToString();
+            //var tempSource = System.IO.Path.GetTempFileName();
+            //var tempDest = System.IO.Path.GetTempFileName();
+            //while (tempSource == tempDest)
+            //    tempDest = System.IO.Path.GetTempFileName();
+            //File.Copy(source, tempSource, true);
+            //if (File.Exists(tempDest))
+            //    File.Delete(tempDest);
+            //info.ArgumentList.Add(tempSource);
+            //info.ArgumentList.Add(tempDest);
             //info.ArgumentList.Add("/c");
             //info.ArgumentList.Add("start");
             //info.ArgumentList.Add(path);
@@ -396,13 +405,17 @@ namespace BDOTranslator_WPF.Controllers
             //info.ArgumentList.Add(dest);
             //info.CreateNoWindow = true;
             //info.UseShellExecute = true;
-            //info.WindowStyle = ProcessWindowStyle.Minimized;
+            //info.WindowStyle = ProcessWindowStyle.Hidden;
             //var proc = Process.Start(info);
             //proc.WaitForExit();
-            if (encrypt)
-                BDOScript.Encrypt(source, dest);
-            else
+            //File.Delete(tempSource);
+            //if (File.Exists(dest))
+            //    File.Delete(dest);
+            //File.Move(tempDest, dest);
+            if (!encrypt)
                 BDOScript.Decrypt(source, dest);
+            else
+                BDOScript.Encrypt(source, dest);
             return Response.OK;
         }
 
